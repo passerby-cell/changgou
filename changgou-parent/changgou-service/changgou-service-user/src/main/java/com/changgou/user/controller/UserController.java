@@ -1,16 +1,23 @@
 package com.changgou.user.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.changgou.user.pojo.User;
 import com.changgou.user.service.UserService;
 import com.github.pagehelper.PageInfo;
 import entity.BCrypt;
+import entity.JwtUtil;
 import entity.Result;
 import entity.StatusCode;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /****
  * @Author:shenkunlin
@@ -30,10 +37,21 @@ public class UserController {
      * 用户登陆
      */
     @RequestMapping("/login")
-    public Result login(String username, String password) {
+    public Result login(String username, String password, HttpServletResponse response) {
         User user = userService.findById(username);
         if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-            return new Result(true, StatusCode.OK, "登陆成功！", user);
+            //使用Jwt生成令牌
+            //1、设置令牌信息
+            Map<String,Object> info =new HashMap<String,Object>();
+            info.put("role","USER");
+            info.put("username",username);
+            info.put("password",password);
+            //2、生成令牌
+            String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(info), null);
+            //将令牌存到cookie中
+            Cookie cookie = new Cookie("Authorization",jwt);
+            response.addCookie(cookie);
+            return new Result(true, StatusCode.OK, "登陆成功！", jwt);
         } else {
             return new Result(false, StatusCode.LOGINERROR, "登陆失败！帐号或密码错误。");
         }
