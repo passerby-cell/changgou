@@ -16,6 +16,7 @@
         <module>changgou-service-goods-api</module>
         <module>changgou-service-content-api</module>
         <module>changgou-service-search-api</module>
+        <module>changgou-service-user-api</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

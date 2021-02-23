@@ -16,7 +16,6 @@
         <module>changgou-eureka</module>
         <module>changgou-common</module>
         <module>changgou-common-db</module>
-        <module>untitled</module>
     </modules>
     <description>
         畅购商城的父工程
