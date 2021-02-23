@@ -58,16 +58,19 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             }
         }
 
-        //如果为空，则输出错误代码
+        //如果为空，则输出错误代码,没有令牌则拦截
         if (StringUtils.isEmpty(tokent)) {
             //设置方法不允许被访问，405错误代码
             response.setStatusCode(HttpStatus.METHOD_NOT_ALLOWED);
+            //响应空数据
             return response.setComplete();
         }
 
         //解析令牌数据
         try {
             Claims claims = JwtUtil.parseJWT(tokent);
+            //将令牌数据添加到请求头中
+            request.mutate().header(AUTHORIZE_TOKEN,claims.toString());
         } catch (Exception e) {
             e.printStackTrace();
             //解析失败，响应401错误
@@ -75,7 +78,8 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             return response.setComplete();
         }
 
-        //放行
+
+        //有效则放行
         return chain.filter(exchange);
     }
 

@@ -42,8 +42,8 @@ public class UserController {
             //1、设置令牌信息
             Map<String,Object> info =new HashMap<String,Object>();
             info.put("role","USER");
-            info.put("username","SUCCESS");
-            info.put("success",password);
+            info.put("success","SUCCESS");
+            info.put("username",username);
             //2、生成令牌
             String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(info), null);
             //将令牌存到cookie中
@@ -171,8 +171,8 @@ public class UserController {
     @GetMapping
     public Result<List<User>> findAll(HttpServletRequest request) {
         //获取令牌信息
-        Enumeration<String> authorzation = request.getHeaders("Authorzation");
-        System.out.println("令牌信息"+authorzation);
+        String authorization = request.getHeader("Authorization");
+        System.out.println("令牌信息"+authorization);
         //调用UserService实现查询所有User
         List<User> list = userService.findAll();
         return new Result<List<User>>(true, StatusCode.OK, "查询成功", list);
