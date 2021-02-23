@@ -51,9 +51,11 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         }
 
         //从cookie中获取令牌数据
-        HttpCookie first = request.getCookies().getFirst(AUTHORIZE_TOKEN);
-        if (first!=null){
-            tokent=first.getValue();
+        if (StringUtils.isEmpty(tokent)){
+            HttpCookie first = request.getCookies().getFirst(AUTHORIZE_TOKEN);
+            if (first!=null){
+                tokent=first.getValue();
+            }
         }
 
         //如果为空，则输出错误代码
@@ -79,7 +81,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
 
     /***
-     * 过滤器执行顺序
+     * 过滤器执行顺序,越小越先执行
      * @return
      */
     @Override

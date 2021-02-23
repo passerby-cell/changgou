@@ -13,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /****
  * @Author:shenkunlin
@@ -44,8 +42,8 @@ public class UserController {
             //1、设置令牌信息
             Map<String,Object> info =new HashMap<String,Object>();
             info.put("role","USER");
-            info.put("username",username);
-            info.put("password",password);
+            info.put("username","SUCCESS");
+            info.put("success",password);
             //2、生成令牌
             String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(info), null);
             //将令牌存到cookie中
@@ -171,7 +169,10 @@ public class UserController {
      */
     @ApiOperation(value = "查询所有User", notes = "查询所User有方法详情", tags = {"UserController"})
     @GetMapping
-    public Result<List<User>> findAll() {
+    public Result<List<User>> findAll(HttpServletRequest request) {
+        //获取令牌信息
+        Enumeration<String> authorzation = request.getHeaders("Authorzation");
+        System.out.println("令牌信息"+authorzation);
         //调用UserService实现查询所有User
         List<User> list = userService.findAll();
         return new Result<List<User>>(true, StatusCode.OK, "查询成功", list);
