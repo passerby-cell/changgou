@@ -1,5 +1,4 @@
 package com.changgou.oauth.config;
-
 import com.changgou.oauth.util.UserJwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -41,9 +40,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 //秘钥
                 String clientSecret = clientDetails.getClientSecret();
                 //静态方式
-                //return new User(username,new BCryptPasswordEncoder().encode(clientSecret), AuthorityUtils.commaSeparatedStringToAuthorityList(""));
+                return new User(username,new BCryptPasswordEncoder().encode(clientSecret), AuthorityUtils.commaSeparatedStringToAuthorityList(""));
                 //数据库查找方式
-                return new User(username,clientSecret, AuthorityUtils.commaSeparatedStringToAuthorityList(""));
+                //return new User(username,clientSecret, AuthorityUtils.commaSeparatedStringToAuthorityList(""));
             }
         }
 
@@ -52,10 +51,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         //根据用户名查询用户信息
-        String pwd = new BCryptPasswordEncoder().encode("itheima");
+        String pwd = new BCryptPasswordEncoder().encode("szitheima");
         //创建User对象
         String permissions = "goods_list,seckill_list";
+
+
         UserJwt userDetails = new UserJwt(username,pwd,AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
+
+
+        //userDetails.setComy(songsi);
         return userDetails;
     }
 }
