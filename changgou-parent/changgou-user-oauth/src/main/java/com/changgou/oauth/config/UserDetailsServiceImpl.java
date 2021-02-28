@@ -49,6 +49,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (StringUtils.isEmpty(username)) {
             return null;
         }
+        //客户端ID：changgou
+        //客户端密钥：changgou
+
+        //普通用户-》账号：任意账号  密码：szitheima
 
         //根据用户名查询用户信息
         String pwd = new BCryptPasswordEncoder().encode("szitheima");
