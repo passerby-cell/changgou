@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
+@SuppressWarnings("all")
 public class CustomUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
     @Autowired
