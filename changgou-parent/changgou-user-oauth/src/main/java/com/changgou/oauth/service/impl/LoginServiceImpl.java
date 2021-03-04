@@ -36,7 +36,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public AuthToken login(String username, String password, String clientId, String clientSecret, String grandType) {
-
         //1.定义url (申请令牌的url)
         //参数 : 微服务的名称spring.appplication指定的名称
         ServiceInstance choose = loadBalancerClient.choose("user-auth");
@@ -85,7 +84,7 @@ public class LoginServiceImpl implements LoginService {
 
 
     public static void main(String[] args) {
-        byte[] decode = Base64.getDecoder().decode(new String("Y2hhbmdnb3UxOmNoYW5nZ291Mg==").getBytes());
+        byte[] decode = Base64.getDecoder().decode(new String("bnVsbDpudWxs").getBytes());
         System.out.println(new String(decode));
     }
 }

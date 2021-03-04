@@ -23,3 +23,12 @@ eureka:
 feign:
   hystrix:
     enabled: true
+#hystrix 配置,将线程池隔离换为信号量隔离
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+          strategy: SEMAPHORE

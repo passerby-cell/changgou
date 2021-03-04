@@ -73,7 +73,7 @@ public interface UserFeign {
      * @param id
      * @return
      */
-    @GetMapping({"/{id}","/load/{id}"})
+    @GetMapping("/load/{id}")
     Result<User> findById(@PathVariable String id);
 
     /***

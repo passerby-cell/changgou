@@ -3,6 +3,8 @@ server:
 spring:
   application:
     name: search
+  main:
+    allow-bean-definition-overriding: true
   data:
     elasticsearch:
       cluster-name: my-application

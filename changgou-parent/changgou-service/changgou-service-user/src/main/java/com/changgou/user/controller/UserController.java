@@ -10,12 +10,16 @@ import entity.Result;
 import entity.StatusCode;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /****
  * @Author:shenkunlin
@@ -157,6 +161,7 @@ public class UserController {
     @ApiOperation(value = "User根据ID查询", notes = "根据ID查询User方法详情", tags = {"UserController"})
     @ApiImplicitParam(paramType = "path", name = "id", value = "主键ID", required = true, dataType = "String")
     @GetMapping({"/{id}","/load/{id}"})
+    @PreAuthorize(value = "hasAuthority('admin')")
     public Result<User> findById(@PathVariable String id) {
         //调用UserService实现根据主键查询User
         User user = userService.findById(id);

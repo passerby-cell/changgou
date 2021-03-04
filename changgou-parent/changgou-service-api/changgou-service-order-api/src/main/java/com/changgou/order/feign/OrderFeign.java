@@ -1,9 +1,12 @@
 package com.changgou.order.feign;
 
+import com.changgou.order.pojo.Order;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /****
  * @Author:shenkunlin
@@ -22,7 +25,7 @@ public interface OrderFeign {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}" )
-    Result<PageInfo> findPage(@RequestBody(required = false) Order order, @PathVariable int page, @PathVariable  int size);
+    Result<PageInfo> findPage(@RequestBody(required = false)  Order order, @PathVariable int page, @PathVariable  int size);
 
     /***
      * Order分页搜索实现

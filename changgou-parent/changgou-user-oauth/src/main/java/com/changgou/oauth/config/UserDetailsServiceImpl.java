@@ -61,10 +61,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return null;
         }
         //从数据库加载查询用户信息
+        System.out.println("feignd调用。。。");
         Result<com.changgou.user.pojo.User> user = userFeign.findById(username);
         //客户端ID：changgou
         //客户端密钥：changgou
-
+        System.out.println("成功");
         //普通用户-》账号：任意账号  密码：szitheima
         if (user == null || user.getData() == null) {
             return null;
@@ -73,7 +74,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String pwd = user.getData().getPassword();
 
         //创建User对象
-        String permissions = "goods_list,seckill_list";
+        String permissions = "user,vip,admin";
 
 
         UserJwt userDetails = new UserJwt(username, pwd, AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
