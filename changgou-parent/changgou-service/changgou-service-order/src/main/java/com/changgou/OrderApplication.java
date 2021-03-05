@@ -1,6 +1,7 @@
 package com.changgou;
 
 import entity.FeignInterceptor;
+import entity.IdWorker;
 import entity.TokenDecode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,5 +29,9 @@ public class OrderApplication {
     @Bean
     public TokenDecode tokenDecode(){
         return new TokenDecode();
+    }
+    @Bean
+    public IdWorker idWorker(){
+        return new IdWorker(0,0);
     }
 }

@@ -44,7 +44,7 @@ public class CartServiceImpl implements CartService {
         //查询商品的详情
         Result<Sku> skuResult = skuFeign.findById(id);
         Sku sku = skuResult.getData();
-        Result<Spu> spuResult = spuFeign.findById(sku.getId());
+        Result<Spu> spuResult = spuFeign.findById(sku.getSpuId());
         Spu spu = spuResult.getData();
         //将数据封装并存到redis中
         createOrderIterm(number, id, username, sku, spu);

@@ -18,11 +18,23 @@ import java.util.List;
  * @Date 2019/6/14 0:16
  *****/
 @Service
+@SuppressWarnings("all")
 public class AddressServiceImpl implements AddressService {
 
     @Autowired
     private AddressMapper addressMapper;
 
+    /***
+     * 根据用户名查询用户地址信息
+     * @param username
+     * @return
+     */
+    @Override
+    public List<Address> list(String username) {
+        Address address = new Address();
+        address.setUsername(username);
+        return addressMapper.select(address);
+    }
 
     /**
      * Address条件+分页查询

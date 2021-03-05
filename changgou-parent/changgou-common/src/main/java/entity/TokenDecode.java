@@ -25,7 +25,7 @@ public class TokenDecode {
     /***
      * 读取令牌数据
      */
-    public Map<String,String> dcodeToken(String token){
+    public static Map<String,String> dcodeToken(String token){
         //校验Jwt
         Jwt jwt = JwtHelper.decodeAndVerify(token, new RsaVerifier(getPubKey()));
 
@@ -38,7 +38,7 @@ public class TokenDecode {
      * 获取用户信息
      * @return
      */
-    public Map<String,String> getUserInfo(){
+    public static Map<String,String> getUserInfo(){
         //获取授权信息
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
         //令牌解码
@@ -49,7 +49,7 @@ public class TokenDecode {
      * 获取非对称加密公钥 Key
      * @return 公钥 Key
      */
-    public String getPubKey() {
+    public static String getPubKey() {
         if(!StringUtils.isEmpty(publickey)){
             return publickey;
         }

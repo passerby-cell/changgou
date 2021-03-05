@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /****
  * @Author:shenkunlin
@@ -127,7 +128,16 @@ public class Order implements Serializable{
     @Column(name = "is_delete")
 	private String isDelete;//是否删除
 
+	//添加一个字段，用于记录当前订单勾选的商品id
+	 private List<Long> skuIds;
 
+	public List<Long> getSkuIds() {
+		return skuIds;
+	}
+
+	public void setSkuIds(List<Long> skuIds) {
+		this.skuIds = skuIds;
+	}
 
 	//get方法
 	public String getId() {
