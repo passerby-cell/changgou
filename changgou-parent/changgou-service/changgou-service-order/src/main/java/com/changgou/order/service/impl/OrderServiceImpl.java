@@ -1,5 +1,6 @@
 package com.changgou.order.service.impl;
 
+import com.changgou.goods.feign.SkuFeign;
 import com.changgou.order.dao.OrderItemMapper;
 import com.changgou.order.dao.OrderMapper;
 import com.changgou.order.pojo.Order;
@@ -14,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /****
  * @Author:shenkunlin
@@ -35,6 +34,8 @@ public class OrderServiceImpl implements OrderService {
     private IdWorker idWorker;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private SkuFeign skuFeign;
 
     /***
      * 添加订单
@@ -61,6 +62,8 @@ public class OrderServiceImpl implements OrderService {
         }
         Integer totalprice = 0;//总金额
         Integer totalnum = 0;//总数量
+        // DecrCountDTO skuId, num
+        Map<String,Integer> decrmap=new HashMap<String,Integer>();
         for (OrderItem o :
                 orderitems) {
             totalprice += o.getMoney();
@@ -68,6 +71,11 @@ public class OrderServiceImpl implements OrderService {
             o.setId(String.valueOf(idWorker.nextId()));
             o.setOrderId(order.getId());
             o.setIsReturn("0");
+            //封装递减数据
+            decrmap.put(o.getSkuId().toString(),o.getNum());
+            skuFeign.decrCount(decrmap);
+//            skuFeign.decrCount(o.getSkuId(),o.getNum());
+
         }
         /***
          * 订单购买的商品总数量=每个商品的总数量之和

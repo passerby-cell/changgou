@@ -9,7 +9,9 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /****
  * @Author:shenkunlin
@@ -24,6 +26,22 @@ public class SkuController {
 
     @Autowired
     private SkuService skuService;
+
+    /***
+     * 商品信息的递减
+     * Map<key,value>,key:要递减的商品id，value：要递减的商品数量
+     * @return
+     */
+    @GetMapping("/decr")
+    public Result decrCount(@RequestParam Map<String, Object> decrmap) {
+        //商品库存递减
+        HashMap<String, Integer> map = new HashMap<>(4);
+        decrmap.forEach((k,v)->{
+            map.put(k,Integer.valueOf(v.toString()));
+        });
+        skuService.decrCount(map);
+        return new Result(true,StatusCode.OK,"商品库存递减成功！");
+    }
 
     /***
      * 根据审核状态查询Sku

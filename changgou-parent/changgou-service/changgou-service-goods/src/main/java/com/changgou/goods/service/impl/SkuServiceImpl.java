@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
 
 /****
  * @Author:shenkunlin
@@ -222,5 +223,38 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public List<Sku> findAll() {
         return skuMapper.selectAll();
+    }
+
+    /***
+     * 商品库存递减
+     * @param decrmap
+     */
+    @Override
+    public void decrCount(Map<String, Integer> decrmap) {
+
+        decrmap.forEach((key,value)->{
+            int count = skuMapper.decrCount(key, value);
+            if (count<=0){
+                throw new RuntimeException("库存不足，请回滚。");
+            }
+        });
+
+//        for (Map.Entry<String, Integer> entry : decrmap.entrySet()) {
+//            String key = entry.getKey();
+//            Integer value = Integer.valueOf(entry.getValue().toString());
+//            //此操作无法保证数据的原子性会产生超卖现象
+////            Sku select = skuMapper.selectByPrimaryKey(key);
+////            Integer num = select.getNum();
+////            if (num>=value){
+////                sku.setNum(value);
+////                skuMapper.updateByPrimaryKeySelective(sku);
+////            }
+//            //采用行级锁控制超卖 update tb_sku set num = num-#{num} where id = #{id} and num>=#{num}
+//            //数据库中每条记录都有行级锁，此时只允许一个事务修改该记录，只有等该事物结束后，其他事务才能操作该记录
+//            int count = skuMapper.decrCount(key, value);
+//            if (count<=0){
+//                throw new RuntimeException("库存不足，请回滚。");
+//            }
+//        }
     }
 }
