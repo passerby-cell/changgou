@@ -1,4 +1,5 @@
 package com.changgou.user.feign;
+
 import com.changgou.user.pojo.User;
 import com.github.pagehelper.PageInfo;
 import entity.Result;
@@ -12,9 +13,16 @@ import java.util.List;
  * @Description:
  * @Date 2019/6/18 13:58
  *****/
-@FeignClient(name="user")
+@FeignClient(name = "user")
 @RequestMapping("/user")
 public interface UserFeign {
+    /***
+     * 增加积分
+     * @param points
+     * @return
+     */
+    @GetMapping("/points/add")
+    Result addPoints(@RequestParam Integer points);
 
     /***
      * User分页条件搜索实现
@@ -23,8 +31,8 @@ public interface UserFeign {
      * @param size
      * @return
      */
-    @PostMapping(value = "/search/{page}/{size}" )
-    Result<PageInfo> findPage(@RequestBody(required = false) User user, @PathVariable int page, @PathVariable  int size);
+    @PostMapping(value = "/search/{page}/{size}")
+    Result<PageInfo> findPage(@RequestBody(required = false) User user, @PathVariable int page, @PathVariable int size);
 
     /***
      * User分页搜索实现
@@ -32,15 +40,15 @@ public interface UserFeign {
      * @param size:每页显示多少条
      * @return
      */
-    @GetMapping(value = "/search/{page}/{size}" )
-    Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size);
+    @GetMapping(value = "/search/{page}/{size}")
+    Result<PageInfo> findPage(@PathVariable int page, @PathVariable int size);
 
     /***
      * 多条件搜索品牌数据
      * @param user
      * @return
      */
-    @PostMapping(value = "/search" )
+    @PostMapping(value = "/search")
     Result<List<User>> findList(@RequestBody(required = false) User user);
 
     /***
@@ -48,7 +56,7 @@ public interface UserFeign {
      * @param id
      * @return
      */
-    @DeleteMapping(value = "/{id}" )
+    @DeleteMapping(value = "/{id}")
     Result delete(@PathVariable String id);
 
     /***
@@ -57,8 +65,8 @@ public interface UserFeign {
      * @param id
      * @return
      */
-    @PutMapping(value="/{id}")
-    Result update(@RequestBody User user,@PathVariable String id);
+    @PutMapping(value = "/{id}")
+    Result update(@RequestBody User user, @PathVariable String id);
 
     /***
      * 新增User数据

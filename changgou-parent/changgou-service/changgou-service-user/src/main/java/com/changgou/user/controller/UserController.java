@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.changgou.user.pojo.User;
 import com.changgou.user.service.UserService;
 import com.github.pagehelper.PageInfo;
-import entity.BCrypt;
-import entity.JwtUtil;
-import entity.Result;
-import entity.StatusCode;
+import entity.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,6 +33,19 @@ public class UserController {
     private UserService userService;
 
     /***
+     * 增加积分
+     * @param points
+     * @return
+     */
+    @GetMapping("/points/add")
+    public Result addPoints(Integer points) {
+        String username = TokenDecode.getUserInfo().get("username");
+        //调用service增加用户积分
+        userService.addPoints(username, points);
+        return new Result(true, StatusCode.OK, "积分增加成功");
+    }
+
+    /***
      * 用户登陆
      */
     @RequestMapping("/login")
@@ -44,14 +54,14 @@ public class UserController {
         if (user != null && BCrypt.checkpw(password, user.getPassword())) {
             //使用Jwt生成令牌
             //1、设置令牌信息
-            Map<String,Object> info =new HashMap<String,Object>();
-            info.put("role","USER");
-            info.put("success","SUCCESS");
-            info.put("username",username);
+            Map<String, Object> info = new HashMap<String, Object>();
+            info.put("role", "USER");
+            info.put("success", "SUCCESS");
+            info.put("username", username);
             //2、生成令牌
             String jwt = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(info), null);
             //将令牌存到cookie中
-            Cookie cookie = new Cookie("Authorization",jwt);
+            Cookie cookie = new Cookie("Authorization", jwt);
             response.addCookie(cookie);
             return new Result(true, StatusCode.OK, "登陆成功！", jwt);
         } else {
@@ -160,7 +170,7 @@ public class UserController {
      */
     @ApiOperation(value = "User根据ID查询", notes = "根据ID查询User方法详情", tags = {"UserController"})
     @ApiImplicitParam(paramType = "path", name = "id", value = "主键ID", required = true, dataType = "String")
-    @GetMapping({"/{id}","/load/{id}"})
+    @GetMapping({"/{id}", "/load/{id}"})
     @PreAuthorize(value = "hasAuthority('admin')")
     public Result<User> findById(@PathVariable String id) {
         //调用UserService实现根据主键查询User
@@ -177,7 +187,7 @@ public class UserController {
     public Result<List<User>> findAll(HttpServletRequest request) {
         //获取令牌信息
         String authorization = request.getHeader("Authorization");
-        System.out.println("令牌信息"+authorization);
+        System.out.println("令牌信息" + authorization);
         //调用UserService实现查询所有User
         List<User> list = userService.findAll();
         return new Result<List<User>>(true, StatusCode.OK, "查询成功", list);

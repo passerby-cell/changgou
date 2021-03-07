@@ -6,6 +6,7 @@ import com.changgou.order.dao.OrderMapper;
 import com.changgou.order.pojo.Order;
 import com.changgou.order.pojo.OrderItem;
 import com.changgou.order.service.OrderService;
+import com.changgou.user.feign.UserFeign;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import entity.IdWorker;
@@ -36,6 +37,8 @@ public class OrderServiceImpl implements OrderService {
     private RedisTemplate redisTemplate;
     @Autowired
     private SkuFeign skuFeign;
+    @Autowired
+    private UserFeign userFeign;
 
     /***
      * 添加订单
@@ -63,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         Integer totalprice = 0;//总金额
         Integer totalnum = 0;//总数量
         // DecrCountDTO skuId, num
-        Map<String,Integer> decrmap=new HashMap<String,Integer>();
+        Map<String, Integer> decrmap = new HashMap<String, Integer>();
         for (OrderItem o :
                 orderitems) {
             totalprice += o.getMoney();
@@ -72,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
             o.setOrderId(order.getId());
             o.setIsReturn("0");
             //封装递减数据
-            decrmap.put(o.getSkuId().toString(),o.getNum());
+            decrmap.put(o.getSkuId().toString(), o.getNum());
             skuFeign.decrCount(decrmap);
 //            skuFeign.decrCount(o.getSkuId(),o.getNum());
 
@@ -95,6 +98,10 @@ public class OrderServiceImpl implements OrderService {
                 orderitems) {
             orderItemMapper.insertSelective(orderitem);
         }
+        /**
+         * 下单用户活跃度加1
+         */
+        userFeign.addPoints(1);
 
     }
 

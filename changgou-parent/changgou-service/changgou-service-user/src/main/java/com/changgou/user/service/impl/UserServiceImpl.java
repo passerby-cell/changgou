@@ -18,6 +18,7 @@ import java.util.List;
  * @Date 2019/6/14 0:16
  *****/
 @Service
+@SuppressWarnings("all")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -206,5 +207,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userMapper.selectAll();
+    }
+
+    /***
+     * 增加用户积分
+     * @param username
+     * @param points
+     */
+    @Override
+    public void addPoints(String username, Integer points) {
+        userMapper.addPoints(username,points);
     }
 }
